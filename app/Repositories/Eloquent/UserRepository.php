@@ -19,4 +19,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->create($data);
     }
+
+    public function login($data)
+    {
+        $token = auth()->attempt($data);
+        if (!$token) {
+            return response()->json([
+                'statusCode' => Response::HTTP_UNAUTHORIZED,
+                'messsage' => 'Unauthorized'
+            ]);
+        }
+        return $token;
+    }
 }

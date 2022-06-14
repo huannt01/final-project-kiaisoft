@@ -41,4 +41,32 @@ class AuthController extends Controller
             $user
         );
     }
+
+    public function login(UserLoginRequest $request)
+    {
+
+        $validated = $request->validated();
+
+        try {
+            $token = $this->userService->loginUser($validated);
+            $result = [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => Auth::factory()->getTTL() * 60,
+                'user' => auth()->user()
+            ];
+        } catch (\Exception $e) {
+            return Helper::responseErrorAPI(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                'E1010',
+                $e->getMessage(),
+                $data = []
+            );
+        }
+
+        return Helper::responseOkAPI(
+            Response::HTTP_OK,
+            $result
+        );
+    }
 }
