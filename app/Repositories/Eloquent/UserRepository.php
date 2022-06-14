@@ -31,4 +31,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
         return $token;
     }
+
+    public function getUser()
+    {
+        return Auth::user();
+    }
+
+    public function userLogout()
+    {
+        return Auth::logout();
+    }
 }

@@ -23,4 +23,14 @@ class UserService
     {
         return $this->userRepository->login($data);
     }
+
+    public function getUser()
+    {
+        return $this->userRepository->getUser();
+    }
+
+    public function userLogout()
+    {
+        return $this->userRepository->userLogout();
+    }
 }
