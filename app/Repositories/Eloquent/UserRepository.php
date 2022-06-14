@@ -14,4 +14,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return User::class;
     }
+
+    public function register($data)
+    {
+        return $this->create($data);
+    }
 }

@@ -2,9 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserLoginRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\User;
+use App\Services\UserService;
+use App\Helpers\Helper;
+
 
 class AuthController extends Controller
 {
-    //
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->userService = $userService;
+    }
+
+    public function register(UserRegisterRequest $request)
+    {
+        $validated = $request->validated();
+
+        try {
+            $user = $this->userService->registerUser($validated);
+        } catch (\Exception $e) {
+            return Helper::responseErrorAPI(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                'E1010',
+                $e->getMessage(),
+                $data = []
+            );
+        }
+        return Helper::responseOkAPI(
+            Response::HTTP_OK,
+            $user
+        );
+    }
 }
