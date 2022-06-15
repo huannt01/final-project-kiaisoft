@@ -10,11 +10,12 @@ class Helper
     const SUCCESS_OK = 0;
     const SUCCESS_FALSE = 1;
 
-    public static function responseOkAPI($code, $data = [])
+    public static function responseOkAPI($code, $data = [], $message = '')
     {
         $output = [
             'success' => self::SUCCESS_OK,
             'data' => $data,
+            'status' => $message,
             'errors' => []
         ];
         return response()->json([

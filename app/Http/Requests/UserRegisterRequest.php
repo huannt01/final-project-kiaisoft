@@ -7,6 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Helpers\Helper;
+use App\Models\User;
 
 class UserRegisterRequest extends FormRequest
 {
@@ -38,7 +39,7 @@ class UserRegisterRequest extends FormRequest
     {
         throw new HttpResponseException(Helper::responseErrorAPI(
             Response::HTTP_UNPROCESSABLE_ENTITY,
-            'E1010',
+            User::ERR_INPUT_INVALID,
             $validator->errors()
         ));
     }

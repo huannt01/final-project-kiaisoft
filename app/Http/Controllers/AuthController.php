@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use App\Services\UserService;
 use App\Helpers\Helper;
-
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
 {
@@ -18,27 +20,56 @@ class AuthController extends Controller
 
     public function __construct(UserService $userService)
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->userService = $userService;
     }
 
     public function register(UserRegisterRequest $request)
     {
-        $validated = $request->validated();
-
         try {
-            $user = $this->userService->registerUser($validated);
+            $user = $this->userService->registerUser($request->all());
+            $user->sendEmailVerificationNotification();
+
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                $user,
+                'Verification-link-sent'
+            );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
-                'E1010',
-                $e->getMessage(),
-                $data = []
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
             );
         }
-        return Helper::responseOkAPI(
-            Response::HTTP_OK,
-            $user
-        );
+    }
+
+    public function verify(Request $request)
+    {
+        try {
+            $user = $this->userService->getUserVerify($request->id);
+            if ($user->hasVerifiedEmail()) {
+                return Helper::responseErrorAPI(
+                    Response::HTTP_OK,
+                    User::ERR_EMAIL_ALREADY_VERIFIED,
+                    'Email already verified'
+                );
+            }
+
+            if ($user->markEmailAsVerified()) {
+                event(new Verified($user));
+            }
+
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                $user,
+                'Email has been verified'
+            );
+        } catch (\Exception $e) {
+            return Helper::responseErrorAPI(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
+            );
+        }
     }
 }
