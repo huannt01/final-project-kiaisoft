@@ -74,35 +74,34 @@ class AuthController extends Controller
     {
         try {
             $user = $this->userService->getUser();
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                $user
+            );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
-                'E1010',
-                $e->getMessage(),
-                $data = []
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
             );
         }
-        return Helper::responseOkAPI(
-            Response::HTTP_OK,
-            $user
-        );
     }
 
     public function logout()
     {
         try {
             $this->userService->userLogout();
+
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                'User logged out successfully'
+            );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
-                'E1010',
-                $e->getMessage(),
-                $data = []
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
             );
         }
-        return Helper::responseOkAPI(
-            Response::HTTP_OK,
-            'User logged out successfully'
-        );
     }
 }

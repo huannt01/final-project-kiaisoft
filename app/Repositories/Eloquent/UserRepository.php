@@ -17,7 +17,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function register($data)
     {
-        return $this->create($data);
+        return $this->model->create($data);
     }
 
     public function login($data)
