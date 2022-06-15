@@ -14,4 +14,14 @@ class UserRepository extends BaseRepository
     {
         return User::class;
     }
+
+    public function getUser()
+    {
+        return Auth::user();
+    }
+
+    public function userLogout()
+    {
+        return Auth::logout();
+    }
 }

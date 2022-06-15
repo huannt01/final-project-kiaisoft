@@ -12,4 +12,14 @@ class UserService
     {
         $this->userRepository = $userRepository;
     }
+
+    public function getUser()
+    {
+        return $this->userRepository->getUser();
+    }
+
+    public function userLogout()
+    {
+        return $this->userRepository->userLogout();
+    }
 }
