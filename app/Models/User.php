@@ -14,7 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     const ERR_LOGIN_FAILED = 'E1008';
     const ERR_LOGIN_BLOCK = 'E1009';
-    const ERR_LOGIN_vERIFIED_EMAIL = 'E1010';
+    const ERR_LOGIN_VERIFIED_EMAIL = 'E1010';
     const ERR_UNAUTHENTICATED = 'E1011';
     const ERR_TOKEN_INVALID_EXCEPTION = 'E1012';
     const ERR_INTERNAL_SERVER_ERROR = 'E1022';

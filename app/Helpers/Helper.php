@@ -2,20 +2,16 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Response;
-
 class Helper
 {
     const SUCCESS_OK = 0;
     const SUCCESS_FALSE = 1;
 
-    public static function responseOkAPI($code, $data = [], $message = '')
+    public static function responseOkAPI($code, $data = [])
     {
         $output = [
             'success' => self::SUCCESS_OK,
             'data' => $data,
-            'status' => $message,
             'errors' => []
         ];
         return response()->json([

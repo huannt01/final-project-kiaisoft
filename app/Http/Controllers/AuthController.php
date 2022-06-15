@@ -12,7 +12,6 @@ use App\Services\UserService;
 use App\Helpers\Helper;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
 {
@@ -31,8 +30,10 @@ class AuthController extends Controller
 
             return Helper::responseOkAPI(
                 Response::HTTP_OK,
-                $user,
-                'Verification-link-sent'
+                [
+                    'message' => 'Verification link sent',
+                    'user' => $user
+                ],
             );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
@@ -43,10 +44,10 @@ class AuthController extends Controller
         }
     }
 
-    public function verify(Request $request)
+    public function verify(Request $request, $id)
     {
         try {
-            $user = $this->userService->getUserVerify($request->id);
+            $user = $this->userService->getUserVerify($id);
             if ($user->hasVerifiedEmail()) {
                 return Helper::responseErrorAPI(
                     Response::HTTP_OK,
@@ -61,8 +62,10 @@ class AuthController extends Controller
 
             return Helper::responseOkAPI(
                 Response::HTTP_OK,
-                $user,
-                'Email has been verified'
+                [
+                    'message' => 'Email has been verified',
+                    'user' => $user
+                ],
             );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
