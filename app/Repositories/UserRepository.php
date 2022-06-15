@@ -14,4 +14,10 @@ class UserRepository extends BaseRepository
     {
         return User::class;
     }
+
+    public function login($data)
+    {
+        $token = auth()->attempt($data);
+        return $token;
+    }
 }
