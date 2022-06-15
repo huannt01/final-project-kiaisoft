@@ -18,56 +18,59 @@ class AuthController extends Controller
 
     public function __construct(UserService $userService)
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->userService = $userService;
     }
 
     public function register(UserRegisterRequest $request)
     {
-        $validated = $request->validated();
-
         try {
-            $user = $this->userService->registerUser($validated);
+            $user = $this->userService->registerUser($request->all());
+            $user->sendEmailVerificationNotification();
+
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                [
+                    'message' => 'Verification link sent',
+                    'user' => $user
+                ],
+            );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
-                'E1010',
-                $e->getMessage(),
-                $data = []
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
             );
         }
-        return Helper::responseOkAPI(
-            Response::HTTP_OK,
-            $user
-        );
     }
 
     public function login(UserLoginRequest $request)
     {
-
-        $validated = $request->validated();
-
         try {
-            $token = $this->userService->loginUser($validated);
+            $token = $this->userService->loginUser($request->all());
+            if (!$token) {
+                return Helper::responseErrorAPI(
+                    Response::HTTP_UNAUTHORIZED,
+                    User::ERR_LOGIN_FAILED,
+                    'Login failed'
+                );
+            }
             $result = [
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => Auth::factory()->getTTL() * 60,
                 'user' => auth()->user()
             ];
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                $result
+            );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(
                 Response::HTTP_INTERNAL_SERVER_ERROR,
-                'E1010',
-                $e->getMessage(),
-                $data = []
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
             );
         }
-
-        return Helper::responseOkAPI(
-            Response::HTTP_OK,
-            $result
-        );
     }
 
     public function profile()
