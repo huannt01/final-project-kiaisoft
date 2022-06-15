@@ -14,4 +14,14 @@ class UserRepository extends BaseRepository
     {
         return User::class;
     }
+
+    public function register($data)
+    {
+        return $this->model->create($data);
+    }
+
+    public function getUserVerify($id)
+    {
+        return $this->model->find($id);
+    }
 }

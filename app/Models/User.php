@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWTSubject
     const ERROR_CHANGE_PASSWORD = 'E1024';
     const ERR_LOGIN_DEACTIVATED = 'E1025';
     const ERR_INPUT_INVALID = 'E1026';
+    const ERR_EMAIL_ALREADY_VERIFIED = 'E1027';
 
     protected $fillable = [
         'name',
