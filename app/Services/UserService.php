@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -15,11 +16,11 @@ class UserService
 
     public function getUser()
     {
-        return $this->userRepository->getUser();
+        return Auth::user();
     }
 
-    public function userLogout()
+    public function userLogout($id)
     {
-        return $this->userRepository->userLogout();
+        return Auth::logout();
     }
 }

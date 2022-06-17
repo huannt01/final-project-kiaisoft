@@ -7,6 +7,7 @@ use App\Services\UserService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
