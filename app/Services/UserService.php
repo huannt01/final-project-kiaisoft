@@ -14,6 +14,11 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
+    public function loginUser($data)
+    {
+        return $this->userRepository->login($data);
+    }
+
     public function getUser()
     {
         return Auth::user();
