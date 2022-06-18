@@ -24,4 +24,10 @@ class UserRepository extends BaseRepository
     {
         return $this->model->find($id);
     }
+
+    public function login($data)
+    {
+        $token = auth()->attempt($data);
+        return $token;
+    }
 }
