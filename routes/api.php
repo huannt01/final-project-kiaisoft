@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +17,6 @@ use App\Http\Controllers\AuthController;
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($route) {
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('user.profile');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
 });
