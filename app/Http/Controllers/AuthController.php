@@ -43,10 +43,10 @@ class AuthController extends Controller
         }
     }
 
-    public function verify(Request $request, $id)
+    public function verify(Request $request)
     {
         try {
-            $user = $this->userService->getUserVerify($id);
+            $user = $this->userService->getUserVerify($request->id);
             if ($user->hasVerifiedEmail()) {
                 return Helper::responseErrorAPI(
                     Response::HTTP_OK,
@@ -83,7 +83,7 @@ class AuthController extends Controller
                 return Helper::responseErrorAPI(
                     Response::HTTP_UNAUTHORIZED,
                     User::ERR_LOGIN_FAILED,
-                    'Login failed'
+                    'Email or password is incorrect'
                 );
             }
             $result = [
@@ -131,6 +131,22 @@ class AuthController extends Controller
                 Response::HTTP_OK,
                 'User logged out successfully'
 
+            );
+        } catch (\Exception $e) {
+            return Helper::responseErrorAPI(
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                User::ERR_INTERNAL_SERVER_ERROR,
+                $e->getMessage()
+            );
+        }
+    }
+    public function getUserById(Request $request)
+    {
+        try {
+            $user = $this->userService->getUserById($request->id);
+            return Helper::responseOkAPI(
+                Response::HTTP_OK,
+                $user
             );
         } catch (\Exception $e) {
             return Helper::responseErrorAPI(

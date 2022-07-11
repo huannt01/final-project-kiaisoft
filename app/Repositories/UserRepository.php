@@ -30,4 +30,9 @@ class UserRepository extends BaseRepository
         $token = auth()->attempt($data);
         return $token;
     }
+
+    public function getUserById($id)
+    {
+        return $this->model->find($id);
+    }
 }

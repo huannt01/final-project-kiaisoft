@@ -18,7 +18,8 @@ class Helper
             'errors' => []
         ];
         return response()->json([
-            $output, $code
+            'result' => $output,
+            'status' => $code
         ]);
     }
 
@@ -33,7 +34,8 @@ class Helper
             ]
         ];
         return response()->json([
-            $output, $code
+            'result' => $output,
+            'status' => $code
         ]);
     }
 }

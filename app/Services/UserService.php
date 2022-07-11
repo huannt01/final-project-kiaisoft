@@ -39,4 +39,9 @@ class UserService
     {
         return Auth::logout();
     }
+
+    public function getUserById($id)
+    {
+        return $this->userRepository->getUserById($id);
+    }
 }
